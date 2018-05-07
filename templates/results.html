@@ -7,8 +7,10 @@
     </head>
     <body>
         <div class="container">
-            <h2>{{ tweet }}</h2>
-            <h4>{{ author }}.</h4>
-            <a href="/">Try another tweet</a>
+            {% if tweet is defined %}
+                <h2>"{{ tweet }}"</h2>
+            {% endif %}
+            <h4>{{ result }}</h4>
+            <a href="/">Try again</a>
         </div>
     </body>

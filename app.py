@@ -7,6 +7,14 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from textblob import TextBlob
 import re
+import nltk
+from nltk.probability import ConditionalFreqDist
+from nltk.corpus import brown, genesis
+from nltk.util import ngrams
+import random
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 
@@ -93,12 +101,44 @@ X_test_np = [extractFeatures(tweet) for tweet in X_train]
 model = GaussianNB()
 
 model.fit(X_train_np, y_train_np)
-predicted = model.predict(X_test_np)
-expected = y_test_np
+# predicted = model.predict(X_test_np)
+# expected = y_test_np
 
 def predictAuthor(tweet):
   predicted = model.predict([extractFeatures(tweet)])
-  return "Based on your tweet, you are @"+ predicted[0]
+  return "Based on your tweet, you are @"+ predicted[0] + "."
+
+data_array = tweet_dataframe.values
+tweet_text = []
+for data in data_array:
+    tweet_text.append(data[2])
+
+clean_text = "".join(tweet_text)
+clean_text = re.sub(r'^https?:\/\/.*[\r\n]*', '', clean_text, flags=re.MULTILINE)
+clean_text = clean_text.lower()
+TEXT = clean_text.split(" ")
+
+# NLTK shortcuts
+trigrams = nltk.bigrams(TEXT)
+cfd = nltk.ConditionalFreqDist(trigrams)
+
+def generateSentence():
+    # pick a random word from the corpus to start with
+    word = ""
+    # generate 15 more words
+    sentence = ""
+    for i in range(15):
+      sentence += word + " "
+      next_word = random.choice(list(cfd[word].keys()))
+      if word in cfd:
+        if (len(list(cfd[word].keys())) > 10):
+          while(cfd[word][next_word] == 1):
+            next_word = random.choice(list(cfd[word].keys()))
+        word = next_word
+      else:
+          break
+
+    return sentence[:-1]
 
 @app.route("/")
 def display_landing():
@@ -108,4 +148,8 @@ def display_landing():
 @app.route("/check")
 def classify_tweet():
     searchword = request.args.get('tweet', '')
-    return render_template('results.html', tweet=searchword, author=predictAuthor(searchword))
+    return render_template('results.html', tweet=searchword, result=predictAuthor(searchword))
+
+@app.route("/generate")
+def generate_tweet():
+    return render_template('results.html', result='"'+generateSentence()+'" - @realDonaldTrump')
