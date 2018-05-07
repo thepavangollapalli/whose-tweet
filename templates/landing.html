@@ -1,0 +1,22 @@
+<!doctype html>
+    <head>
+        <title>Who wrote the tweet?</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='application.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2 class="center-align title">Who wrote the tweet?</h2>
+            <div class="row">
+              <div class="col s4 center-align">Left</div>
+              <div class="col s4 center-align">
+                  <form class="center-align" action="check" method="get">
+                      <input type="text" placeholder="Enter a tweet.." name="tweet" class="center-align">
+                      <button type="submit" class="center-align">Look up</button>
+                  </form>
+              </div>
+              <div class="col s4 center-align">right</div>
+            </div>
+        </div>
+    </body>
