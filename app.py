@@ -12,9 +12,9 @@ from nltk.probability import ConditionalFreqDist
 from nltk.corpus import brown, genesis
 from nltk.util import ngrams
 import random
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# import sys
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 
@@ -138,7 +138,7 @@ def generateSentence():
       else:
           break
 
-    return sentence[:-1]
+    return sentence[1:-1]
 
 @app.route("/")
 def display_landing():
