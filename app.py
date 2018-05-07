@@ -9,7 +9,7 @@ from textblob import TextBlob
 import re
 import nltk
 from nltk.probability import ConditionalFreqDist
-from nltk.corpus import brown, genesis
+# from nltk.corpus import brown, genesis
 from nltk.util import ngrams
 import random
 # import sys
